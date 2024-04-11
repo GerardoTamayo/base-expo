@@ -90,7 +90,7 @@ CREATE TABLE tb_clientes (
   apellido_cliente VARCHAR(50) NOT NULL,
   telefono_cliente VARCHAR(10),
   correo_cliente VARCHAR(100) UNIQUE,
-  dui_cliente VARCHAR(100) UNIQUE
+  dui_cliente VARCHAR(100) UNIQUE,
   direccion_cliente VARCHAR(100)
 );
 
