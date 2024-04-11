@@ -58,7 +58,6 @@ CREATE TABLE tb_tipousuarios (
 CREATE TABLE tb_compras (
   id_compra INT AUTO_INCREMENT PRIMARY KEY,
   fecha_compra DATETIME NOT NULL,
-  cantidad_compra INT NOT NULL,
   numero_correlativo INT NOT NULL,
   estado_compra ENUM('Cancelada','No cancelada') NOT NULL,
   id_vendedor INT NOT NULL
@@ -67,7 +66,6 @@ CREATE TABLE tb_compras (
 CREATE TABLE tb_ventas (
   id_venta INT AUTO_INCREMENT PRIMARY KEY,
   fecha_venta DATETIME NOT NULL,
-  cantidad_venta INT NOT NULL,
   observacion_venta VARCHAR(100),
   id_cliente INT NOT NULL
 );
@@ -82,7 +80,8 @@ CREATE TABLE tb_movientos_inventario (
   id_moviento_inventario INT AUTO_INCREMENT PRIMARY KEY,
   id_inventario INT NOT NULL,
   id_compra INT NOT NULL,
-  id_venta INT NOT NULL
+  id_venta INT NOT NULL,
+  cantidad INT 
 );
 
 CREATE TABLE tb_clientes (
