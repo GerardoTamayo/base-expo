@@ -59,29 +59,27 @@ CREATE TABLE tb_compras (
   id_compra INT AUTO_INCREMENT PRIMARY KEY,
   fecha_compra DATETIME NOT NULL,
   numero_correlativo INT NOT NULL,
+  cantidad INT NOT NULL,
   estado_compra ENUM('Cancelada','No cancelada') NOT NULL,
-  id_vendedor INT NOT NULL
+  id_vendedor INT NOT NULL,
+  id_producto INT NOT NULL
 );
 
 CREATE TABLE tb_ventas (
   id_venta INT AUTO_INCREMENT PRIMARY KEY,
   fecha_venta DATETIME NOT NULL,
   observacion_venta VARCHAR(100),
-  id_cliente INT NOT NULL
+  cantidad INT NOT NULL,
+  id_cliente INT NOT NULL,
+  id_producto INT NOT NULL
 );
 
 CREATE TABLE tb_inventarios (
   id_inventario INT AUTO_INCREMENT PRIMARY KEY,
   id_producto INT NOT NULL,
-  existencias_producto INT NOT NULL
-);
-
-CREATE TABLE tb_movientos_inventario (
-  id_moviento_inventario INT AUTO_INCREMENT PRIMARY KEY,
-  id_inventario INT NOT NULL,
-  id_compra INT NOT NULL,
+  existencias_producto INT NOT NULL,
   id_venta INT NOT NULL,
-  cantidad INT 
+  id_compra INT NOT NULL
 );
 
 CREATE TABLE tb_clientes (
@@ -106,12 +104,14 @@ ALTER TABLE tb_compras ADD CONSTRAINT fk_id_vendedor FOREIGN KEY (id_vendedor) R
 
 ALTER TABLE tb_inventarios ADD CONSTRAINT fk_id_producto FOREIGN KEY (id_producto) REFERENCES tb_productos (id_producto);
 
-ALTER TABLE tb_movientos_inventario ADD CONSTRAINT fk_id_inventario FOREIGN KEY (id_inventario) REFERENCES tb_inventarios (id_inventario);
-
-ALTER TABLE tb_movientos_inventario ADD CONSTRAINT fk_id_compra FOREIGN KEY (id_compra) REFERENCES tb_compras (id_compra);
-
-ALTER TABLE tb_movientos_inventario ADD CONSTRAINT fk_id_venta FOREIGN KEY (id_venta) REFERENCES tb_ventas (id_venta);
-
 ALTER TABLE tb_productos ADD CONSTRAINT fk_id_usuario FOREIGN KEY (id_usuario) REFERENCES tb_usuarios (id_usuario);
 
 ALTER TABLE tb_ventas ADD CONSTRAINT fk_id_cliente FOREIGN KEY (id_cliente) REFERENCES tb_clientes (id_cliente);
+
+ALTER TABLE tb_compras ADD FOREIGN KEY (id_producto) REFERENCES tb_productos (id_producto);
+
+ALTER TABLE tb_ventas ADD FOREIGN KEY (id_producto) REFERENCES tb_productos (id_producto);
+
+ALTER TABLE tb_inventarios ADD FOREIGN KEY (id_compra) REFERENCES tb_compras (id_compra);
+
+ALTER TABLE tb_inventarios ADD FOREIGN KEY (id_venta) REFERENCES tb_ventas (id_venta);
