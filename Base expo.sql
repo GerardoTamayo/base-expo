@@ -18,7 +18,7 @@ CREATE TABLE tb_proveedores (
   nombre_proveedor VARCHAR(50) NOT NULL,
   apellido_proveedor VARCHAR(50) NOT NULL,
   telefono_proveedor VARCHAR(10) NOT NULL,
-  correo_proveedor VARCHAR(100) UNIQUE NOT NULL
+  correo_proveedor VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE tb_marcas (
@@ -38,7 +38,7 @@ CREATE TABLE tb_usuarios (
   apellido_usuario VARCHAR(50) NOT NULL,
   usuario VARCHAR(25) NOT NULL,
   clave_usuario VARCHAR(25) NOT NULL,
-  correo_usuario VARCHAR(100) UNIQUE NOT NULL,
+  correo_usuario VARCHAR(100) NOT NULL,
   id_tipo INT NOT NULL
 );
 
@@ -47,9 +47,12 @@ CREATE TABLE tb_productos (
   nombre_producto VARCHAR(50) NOT NULL,
   fecha_vencimiento DATETIME NOT NULL,
   precio_compra DECIMAL(10,2) NOT NULL,
+  CONSTRAINT chk_precio_compra CHECK (precio_compra >= 0),
   precio_venta DECIMAL(10,2) NOT NULL,
+  CONSTRAINT chk_precio_venta CHECK (precio_venta >= 0),
   descripcion VARCHAR(100)NOT NULL,
   existencias_producto INT NOT NULL,
+  CONSTRAINT chk_existencias_producto CHECK (existencias_producto >= 0),
   id_tipo_presentacion INT NOT NULL,
   id_categoria INT NOT NULL,
   id_marca INT NOT NULL,
@@ -60,6 +63,7 @@ CREATE TABLE tb_compras (
   id_compra INT AUTO_INCREMENT PRIMARY KEY,
   fecha_compra DATETIME NOT NULL,
   numero_correlativo INT NOT NULL,
+  CONSTRAINT chk_numero_correlativo CHECK (numero_correlativo >= 0),
   estado_compra ENUM('Cancelada','No cancelada') NOT NULL,
   id_proveedor INT NOT NULL
 );
@@ -69,10 +73,11 @@ CREATE TABLE tb_clientes (
   nombre_cliente VARCHAR(50) NOT NULL,
   apellido_cliente VARCHAR(50) NOT NULL,
   telefono_cliente VARCHAR(10),
-  correo_cliente VARCHAR(100) UNIQUE,
-  dui_cliente VARCHAR(100) UNIQUE,
+  correo_cliente VARCHAR(100),
+  dui_cliente VARCHAR(100),
   direccion_cliente VARCHAR(100)
 );
+
 
 CREATE TABLE tb_ventas (
   id_venta INT AUTO_INCREMENT PRIMARY KEY,
@@ -84,7 +89,9 @@ CREATE TABLE tb_ventas (
 CREATE TABLE tb_detalle_ventas (
   id_detalle_venta INT AUTO_INCREMENT PRIMARY KEY,
   cantidad_venta INT,
+  CONSTRAINT chk_cantidad_venta CHECK (cantidad_venta >= 0),
   precio_venta DECIMAL(10,2) NOT NULL,
+  CONSTRAINT chk_precio_venta CHECK (precio_venta >= 0),
   id_producto INT,
   id_venta INT
 );
@@ -92,10 +99,21 @@ CREATE TABLE tb_detalle_ventas (
 CREATE TABLE tb_detalle_compras (
   id_detalle_compra INT AUTO_INCREMENT PRIMARY KEY,
   cantidad_compra INT,
+  CONSTRAINT chk_cantidad_compra CHECK (cantidad_compra >= 0),
   precio_compra DECIMAL(10,2) NOT NULL,
+  CONSTRAINT chk_precio_compra CHECK (precio_compra >= 0),
   id_producto INT,
   id_compra INT 
 );
+
+ALTER TABLE tb_proveedores
+ADD UNIQUE (correo_proveedor);
+
+ALTER TABLE tb_usuarios
+ADD UNIQUE (correo_usuario);
+
+ALTER TABLE tb_clientes
+ADD UNIQUE (correo_cliente, dui_cliente);
 
 ALTER TABLE tb_productos ADD CONSTRAINT fk_id_categoria FOREIGN KEY (id_categoria) REFERENCES tb_categorias (id_categoria);
 
